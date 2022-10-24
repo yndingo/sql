@@ -7,17 +7,17 @@ where gender like 'F' or gender like 'M'
 ```
 Вывести список заказов клиентов: [Фамилия + имя, название фирмы, дата заказа, сумма заказа],
 отсортированный по фамилии, имени, дате заказа.
-
+```
 select client.Surname, client.Name, Firm.Name, Orders.Ord_Time
 from client
 left join orders on client.id = orders.id
 left join firm on client.id = firm.id
  order by client.Surname, client.Name, Orders.Ord_Time
- 
+ ```
 Компания намеревается ввести скидку в размере 10% от суммы заказа, если заказ выполнен в день
 рождения клиента. Требуется определить общую сумму скидки по всем клиентам за 2021 год, как
 если бы скидка действовала.
-
+```
 with query
 as
 (
@@ -28,11 +28,11 @@ as
 select sum(orders.Amount)*0.1 as discount
 from orders, query
 where query.id = orders.Client_ID and CAST(orders.Ord_Time as text) = query.Birthday
-
+```
 Перед Новым 2022-м Годом решено отправить ценные подарки руководителям фирм, сотрудники
 которых за год в общей сложности сделали заказов более чем на 1 000 000 руб. Необходимо
 подготовить такой список: [Название фирмы, адрес, сумма заказов].
-
+```
 with query as
 (
   select sum(orders.amount), client.firm_id
@@ -44,10 +44,10 @@ with query as
 select firm.name, firm.address, query.sum
 from firm, query
 where firm.id = query.firm_id
-
+```
 С помощью одного SQL запроса подготовить список мужчин - потенциальных близнецов среди
 клиентов (с совпадением фамилии и даты рождения): [ID клиента, фамилия, имя, день рождения]
-
+```
 with query as
 (
   select surname, birthday
@@ -58,11 +58,11 @@ with query as
 select client.id, client.surname, client.birthday
 from client, query
 where client.birthday = query.birthday and client.surname = query.surname
-
+```
 Выбрать топ-3 покупателей среди фирм (просуммировав заказы всех представителей фирмы) и
 клиентов-физических лиц (у которых Firm_ID не указан) с самым большим объемом заказов за
 декабрь 2021 года: [Фамилия+имя или название фирмы, сумма заказов].
-
+```
 with result as
 (
   with q0 as
@@ -96,3 +96,4 @@ with result as
 select *
 from result
 limit 3
+```
